@@ -30,7 +30,7 @@ PARTS:
     // Put your code here:
     Not(in=zr, out=notzr);
     Not(in=ng, out=notng);
-    
+
     And(a=j1, b=notzr, out=And1);
     And(a=And1, b=ng, out=And2);
 
