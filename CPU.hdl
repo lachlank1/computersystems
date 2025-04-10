@@ -40,4 +40,20 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+        Decode(in=instruction, type=type, a=ALUsel, c1=zx, c2=nx, c3=zy, c4=ny, c5=f, c6=no, d1=ARegisterload, d2=DRegisterload, d3=writeM, j1=j1, j2=j2, j3=j3);
+
+        Mux16(a=instruction, b=ALUout, sel=type, out=M1out);
+        ARegister(in=M1out, load=ARegisterload, out=ARegisterout, out[0..14]=addressM);
+
+        DRegister(in=ALUout, load=DRegisterload, out=DRegisterout);
+
+        Mux16(a=ARegisterout, b=inM, sel=ALUsel, out=M2out);
+        ALU(x=M2out, y=DRegisterout, zx=zx, nx=nx, zy=zy, ny=ny, f=f, no=no, out=ALUout, zr=zr, ng=ng);
+
+        Or16(a=ALUout, b=false, out = outM);
+
+        Jump(j1=j1, j2=j2, j3=j3, zr=zr, ng=ng, out = jump);
+        And(a=type, b=jump, out=andout);
+
+        PC(in=ARegisterout, load=andout, inc=true, reset=reset, out=pc);
 }
